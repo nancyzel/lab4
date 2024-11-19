@@ -201,7 +201,7 @@
             {
                 try
                 {
-                    Console.WriteLine("Введите неотрицательное целое число большее 0 - количество элементов, которое вы хотите добавить в конец массива:");
+                    Console.WriteLine("Введите неотрицательное целое число - количество элементов, которое вы хотите добавить в конец массива:");
                     addedElementsQuantity = int.Parse(Console.ReadLine());
                     if (addedElementsQuantity < 0)
                     {
@@ -255,6 +255,171 @@
             return (basicArray, isArrayEmpty);
         }
 
+        static int[] ReplaceElementsCyclicalWay(int[] basicArray)
+        {
+            int replaceStep = 0;
+            bool isAppropriateReplaceStep;
+            int[] temporaryArray = new int[basicArray.Length];
+            do
+            {
+                try
+                {
+                    Console.WriteLine("Введите неотрицательное целое число - на сколько элементов влево вы хотите сдвинуть каждое значение в массиве:");
+                    replaceStep = int.Parse(Console.ReadLine());
+                    if (replaceStep < 0)
+                    {
+                        isAppropriateReplaceStep = false;
+                        Console.WriteLine("Количество элементов, на которое нужно сместить массив, не должно быть отрицательным");
+                    }
+                    else
+                    {
+                        isAppropriateReplaceStep = true;
+                    }
+                }
+                catch (FormatException)
+                {
+                    isAppropriateReplaceStep = false;
+                    Console.WriteLine("Введённое вами значение не является целым числом");
+                }
+                catch (OverflowException)
+                {
+                    isAppropriateReplaceStep = false;
+                    Console.WriteLine("Введённое вами значение выходит за границы типа Int32 (меньше -2147483648 или больше 2147483647)");
+                }
+            } while (!isAppropriateReplaceStep);
+            for (int i = 0; i < basicArray.Length; i++)
+            {
+                temporaryArray[i] = basicArray[(i + replaceStep) % basicArray.Length];
+            }
+            basicArray = temporaryArray;
+            Console.WriteLine("Состав массива на данный момент:");
+            PrintArray(basicArray);
+            return basicArray;
+        }
+
+        static void FindFirstNegativeElement(int[] basicArray)
+        {
+            int comparisonQuantity = 0;
+            int arrayIndex = 0;
+            bool isNegativeElementFound = false;
+            do
+            {
+                if (basicArray[arrayIndex++] < 0)
+                {
+                    isNegativeElementFound = true;
+                }
+                comparisonQuantity++;
+            } while (!isNegativeElementFound || arrayIndex >= basicArray.Length);
+            if (isNegativeElementFound)
+            {
+                Console.WriteLine($"Первый отрицательный элемент в массиве: {basicArray[--arrayIndex]}; количество сравнений, необходимых для поиска этого элемента: {comparisonQuantity}.");
+            }
+            else
+            {
+                Console.WriteLine("В массиве не содержится отрицательных элементов.");
+            }
+        }
+
+        static int[] SortOutArraySelection(int[] basicArray)
+        {
+            for (int i = 1; i < basicArray.Length; i++)
+            {
+                for (int j = basicArray.Length - 1; j >= i; j--)
+                {
+                    if (basicArray[j] < basicArray[j - 1])
+                    {
+                        (basicArray[j], basicArray[j - 1]) = (basicArray[j - 1], basicArray[j]);
+                    }
+                }
+            }
+            Console.WriteLine("Состав отсортированного массива:");
+            PrintArray(basicArray);
+            return basicArray;
+        }
+
+        static void FindArrayElement(int[] basicArray)
+        {
+            int comparisonQuantity;
+            int targetElement = Int32.MinValue;
+            int leftMarker = 0;
+            int rightMarker = basicArray.Length - 1;
+            int middleMarker = 0;
+
+            bool isAppropriateTargetElement;
+            basicArray = SortOutArraySelection(basicArray);
+            do
+            {
+                try
+                {
+                    Console.WriteLine("Введите целое число - искомый элемент:");
+                    targetElement = int.Parse(Console.ReadLine());
+                    isAppropriateTargetElement = true;
+                }
+                catch (FormatException)
+                {
+                    isAppropriateTargetElement = false;
+                    Console.WriteLine("Введённое вами значение не является целым числом");
+                }
+                catch (OverflowException)
+                {
+                    isAppropriateTargetElement = false;
+                    Console.WriteLine("Введённое вами значение выходит за границы типа Int32 (меньше -2147483648 или больше 2147483647)");
+                }
+            } while (!isAppropriateTargetElement);
+            do
+            {
+                middleMarker = (leftMarker + rightMarker) / 2;
+                if (basicArray[middleMarker] < targetElement)
+                {
+                    leftMarker = middleMarker + 1;
+                }
+                else
+                {
+                    rightMarker = middleMarker;
+                }
+            } while (leftMarker != rightMarker);
+            if (basicArray[leftMarker] == targetElement)
+            {
+                while ((leftMarker - 1) > 0 && basicArray[leftMarker - 1] == targetElement)
+                {
+                    leftMarker--;
+                }
+                Console.WriteLine($"Элемент найден. Позиция первого элемента с искомым значением в отсортированном массиве: {leftMarker + 1}.");
+            }
+            else
+            {
+                Console.WriteLine("Искомый элемент отсутствует в списке.");
+            }
+        }
+
+        static int[] SortOutArrayShaker(int[] basicArray)
+        {
+            int leftMarker = 0;
+            int rightMarker = basicArray.Length - 1;
+            while (leftMarker <= rightMarker)
+            {
+                for (int i = rightMarker; i > leftMarker; i--)
+                {
+                    if (basicArray[i - 1] > basicArray[i])
+                    {
+                        (basicArray[i - 1], basicArray[i]) = (basicArray[i], basicArray[i - 1]);
+                    }
+                }
+                leftMarker++;
+                for (int i = leftMarker; i < rightMarker; i++)
+                {
+                    if (basicArray[i] > basicArray[i + 1])
+                    {
+                        (basicArray[i], basicArray[i + 1]) = (basicArray[i + 1], basicArray[i]);
+                    }
+                }
+                rightMarker--;
+            }
+            Console.WriteLine("Состав отсортированного массива:");
+            PrintArray(basicArray);
+            return basicArray;
+        }
+
         static void Main(string[] args)
         {
             bool isAppropriate;
@@ -282,11 +447,12 @@
                         Console.WriteLine("6. Выполнить поиск первого отрицательного элемента в массиве и подсчитать количество сравнений, необходимых для поиска этого элемента");
                         Console.WriteLine("7. Выполнить сортировку массива (методом простого обмена)");
                         Console.WriteLine("8. Выполнить поиск элемента, который вводит пользователь с клавиатуры, в отсортированном массиве (бинарный поиск) и подсчитать количество сравнений, необходимых для поиска нужного элемента");
-                        Console.WriteLine("9. Завершить работу");
+                        Console.WriteLine("9. Выполнить шейкер-сортировку массива");
+                        Console.WriteLine("10. Завершить работу");
                         Console.WriteLine();
                         Console.WriteLine("Выберите один из пунктов меню (введите нужную цифру):");
                         menuPoint = int.Parse(Console.ReadLine());
-                        if (menuPoint > 0 && menuPoint < 10)
+                        if (menuPoint > 0 && menuPoint < 11)
                         {
                             isAppropriateMenuPoint = true;
                         }
@@ -380,22 +546,64 @@
                         break;
                     case 5:
                         Console.WriteLine("Вы выбрали: переставить элементы в массиве циклически на заданное число элементов влево");
-
+                        if (!isArrayEmpty && arrayLength != 0)
+                        {
+                            basicArray = ReplaceElementsCyclicalWay(basicArray);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Выбранное действие совершить невозможно, так как массив пустой.");
+                        }
                         break;
                     case 6:
                         Console.WriteLine("Вы выбрали: выполнить поиск первого отрицательного элемента в массиве и подсчитать количество сравнений, необходимых для поиска этого элемента");
+                        if (!isArrayEmpty && arrayLength != 0)
+                        {
+                            FindFirstNegativeElement(basicArray);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Выбранное действие совершить невозможно, так как массив пустой.");
+                        }
                         break;
                     case 7:
                         Console.WriteLine("Вы выбрали: выполнить сортировку массива (методом простого обмена)");
+                        if (!isArrayEmpty && arrayLength != 0)
+                        {
+                            basicArray = SortOutArraySelection(basicArray);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Выбранное действие совершить невозможно, так как массив пустой.");
+                        }
                         break;
                     case 8:
                         Console.WriteLine("Вы выбрали: выполнить поиск элемента, который вводит пользователь с клавиатуры, в отсортированном массиве (бинарный поиск) и подсчитать количество сравнений, необходимых для поиска нужного элемента");
+                        if (!isArrayEmpty && arrayLength != 0)
+                        {
+                            FindArrayElement(basicArray);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Выбранное действие совершить невозможно, так как массив пустой.");
+                        }
+                        break;
+                    case 9:
+                        Console.WriteLine("Вы выбрали: выполнить сортировку массива (методом простого обмена)");
+                        if (!isArrayEmpty && arrayLength != 0)
+                        {
+                            basicArray = SortOutArrayShaker(basicArray);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Выбранное действие совершить невозможно, так как массив пустой.");
+                        }
                         break;
                     default:
                         Console.WriteLine("Вы выбрали: завершить работу");
                         break;
                 }
-            } while (menuPoint!=9);
+            } while (menuPoint!=10);
             #endregion
         }
     }
