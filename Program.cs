@@ -1,4 +1,4 @@
-﻿namespace task1
+namespace task1
 {
     internal class Program
     {
@@ -265,7 +265,7 @@
                 try
                 {
                     Console.WriteLine("Введите неотрицательное целое число - на сколько элементов влево вы хотите сдвинуть каждое значение в массиве:");
-                    replaceStep = int.Parse(Console.ReadLine());
+                    replaceStep = int.Parse(Console.ReadLine()) % basicArray.Length;
                     if (replaceStep < 0)
                     {
                         isAppropriateReplaceStep = false;
@@ -287,13 +287,20 @@
                     Console.WriteLine("Введённое вами значение выходит за границы типа Int32 (меньше -2147483648 или больше 2147483647)");
                 }
             } while (!isAppropriateReplaceStep);
-            for (int i = 0; i < basicArray.Length; i++)
+            if (replaceStep == 0)
             {
-                temporaryArray[i] = basicArray[(i + replaceStep) % basicArray.Length];
+                Console.WriteLine("Количество элементов, на которое нужно сместить массив, равно 0, поэтому порядок элементов в массиве не изменится.");
             }
-            basicArray = temporaryArray;
-            Console.WriteLine("Состав массива на данный момент:");
-            PrintArray(basicArray);
+            else
+            {
+                for (int i = 0; i < basicArray.Length; i++)
+                {
+                    temporaryArray[i] = basicArray[(i + replaceStep) % basicArray.Length];
+                }
+                basicArray = temporaryArray;
+                Console.WriteLine("Состав массива на данный момент:");
+                PrintArray(basicArray);
+            }
             return basicArray;
         }
 
