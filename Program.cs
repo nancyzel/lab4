@@ -98,7 +98,7 @@ namespace task1
             PrintArray(basicArray);
         }
 
-        static (int [], bool) AddNewArrayElements (int[] basicArray, bool isArrayEmpty, int arrayLength)
+        static (int[], bool) AddNewArrayElements(int[] basicArray, bool isArrayEmpty, int arrayLength)
         {
             bool isAppropriateSubMenuPoint;
             int subMenuPoint = 3;
@@ -149,7 +149,7 @@ namespace task1
             return (basicArray, isArrayEmpty);
         }
 
-        static (int[], bool) RemoveMaxElements (int[] basicArray, bool isArrayEmpty)
+        static (int[], bool) RemoveMaxElements(int[] basicArray, bool isArrayEmpty)
         {
             int[] temporaryArray = new int[0];
             int temporaryArrayIndex = 0;
@@ -194,7 +194,7 @@ namespace task1
         {
             int addedElementsQuantity = 0;
             bool isAppropriateAddedElementsQuantity;
-            int[] temporaryArray = new int[0];
+            int[] temporaryArray;
             int[] extraTemporaryArray = new int[0];
             int extraTemporaryArrayIndex = 0;
             do
@@ -346,11 +346,11 @@ namespace task1
 
         static void FindArrayElement(int[] basicArray)
         {
-            int comparisonQuantity;
+            int comparisonQuantity = 0;
             int targetElement = Int32.MinValue;
             int leftMarker = 0;
             int rightMarker = basicArray.Length - 1;
-            int middleMarker = 0;
+            int middleMarker;
 
             bool isAppropriateTargetElement;
             basicArray = SortOutArraySelection(basicArray);
@@ -384,6 +384,7 @@ namespace task1
                 {
                     rightMarker = middleMarker;
                 }
+                comparisonQuantity++;
             } while (leftMarker != rightMarker);
             if (basicArray[leftMarker] == targetElement)
             {
@@ -391,7 +392,7 @@ namespace task1
                 {
                     leftMarker--;
                 }
-                Console.WriteLine($"Элемент найден. Позиция первого элемента с искомым значением в отсортированном массиве: {leftMarker + 1}.");
+                Console.WriteLine($"Элемент найден. Позиция первого элемента с искомым значением в отсортированном массиве: {leftMarker + 1};  количество сравнений, необходимых для поиска этого элемента: {comparisonQuantity}.");
             }
             else
             {
@@ -615,3 +616,4 @@ namespace task1
         }
     }
 }
+
