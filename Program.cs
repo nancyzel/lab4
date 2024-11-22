@@ -210,7 +210,15 @@ namespace task1
                     }
                     else
                     {
-                        isAppropriateAddedElementsQuantity = true;
+                        if (addedElementsQuantity + basicArray.Length <= 2146435071)
+                        {
+                            isAppropriateAddedElementsQuantity = true;
+                        }
+                        else
+                        {
+                            isAppropriateAddedElementsQuantity = false;
+                            Console.WriteLine($"В массив невозможно добавить данное количество элементов: можно добавить не более {2146435071 - basicArray.Length} элементов.");
+                        }
                     }
                 }
                 catch (FormatException)
@@ -221,7 +229,7 @@ namespace task1
                 catch (OverflowException)
                 {
                     isAppropriateAddedElementsQuantity = false;
-                    Console.WriteLine("Введённое вами значение выходит за границы типа Int32 (меньше -2147483648 или больше 2147483647)");
+                    Console.WriteLine("Введённое вами значение отрицательное или выходит за границы типа Int32 (больше 2146435071)");
                 }
             } while (!isAppropriateAddedElementsQuantity);
             if (addedElementsQuantity == 0)
@@ -489,7 +497,7 @@ namespace task1
                         {
                             try
                             {
-                                Console.WriteLine("Введите положительное целое число, большее 0 - длину массива, который вы хотите обработать:");
+                                Console.WriteLine("Введите положительное целое число - длину массива, который вы хотите обработать:");
                                 arrayLength = int.Parse(Console.ReadLine());
                                 if (arrayLength == 0)
                                 {
@@ -505,7 +513,15 @@ namespace task1
                                     }
                                     else
                                     {
-                                        isAppropriate = true;
+                                        if (arrayLength > 2146435071)
+                                        {
+                                            isAppropriate = false;
+                                            Console.WriteLine("Введённое вами значение является слишком большим (больше 2146435071)");
+                                        }
+                                        else
+                                        {
+                                            isAppropriate = true;
+                                        }
                                     }
                                 }
                             }
@@ -517,7 +533,7 @@ namespace task1
                             catch (OverflowException)
                             {
                                 isAppropriate = false;
-                                Console.WriteLine("Введённое вами значение является слишком большим (больше 2147483647)");
+                                Console.WriteLine("Введённое вами значение является слишком большим (больше 2146435071)");
                             }
                         } while (!isAppropriate);
                         basicArray = new int[arrayLength];
