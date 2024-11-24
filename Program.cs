@@ -4,7 +4,9 @@ namespace task1
     {
         static void PrintArray(int[] basicArray)
         {
-            for (int i = 0; i < basicArray.Length; i++)
+            int arrayLength = basicArray.Length; // длина массива
+            // вывод массива поэлементно
+            for (int i = 0; i < arrayLength; i++)
             {
                 Console.Write(basicArray[i] + " ");
             }
@@ -13,10 +15,11 @@ namespace task1
 
         static void GetArrayUsingRandomElements(int[] basicArray, int arrayLength)
         {
-            Random randomElement = new Random();
-            int minimum = Int32.MaxValue;
-            int maximum = Int32.MinValue;
-            bool isAppropriate;
+            Random randomElement = new Random(); // переменная для генерации случайного целого числа из заданного диапазона
+            int minimum = Int32.MinValue; // нижняя граница для генератора случайных чисел
+            int maximum = Int32.MaxValue; // верхняя граница для генератора случайных чисел
+            bool isAppropriate; // переменная-индикатор для проверки корректности ввода
+            // ввод нижней границы для генератора случайных чисел и проверка
             do
             {
                 try
@@ -36,6 +39,7 @@ namespace task1
                     Console.WriteLine("Введённое вами значение выходит за границы типа Int32 (меньше -2147483648 или больше 2147483647)");
                 }
             } while (!isAppropriate);
+            // ввод верхней границы для генератора случайных чисел и проверка
             do
             {
                 try
@@ -63,6 +67,7 @@ namespace task1
                     Console.WriteLine("Введённое вами значение выходит за границы типа Int32 (меньше -2147483648 или больше 2147483647)");
                 }
             } while (!isAppropriate);
+            // заполнение массива сгенерированными случайными числами
             for (int i = 0; i < arrayLength; i++)
             {
                 basicArray[i] = randomElement.Next(minimum, maximum);
@@ -71,7 +76,8 @@ namespace task1
 
         static void GetArrayUsingInput(int[] basicArray, int arrayLength)
         {
-            bool isAppropriate;
+            bool isAppropriate; // переменная-индикатор для проверки корректности ввода
+            // заполнение массива элементами, введенными с клавиатуры и проверка ввода
             for (int i = 0; i < arrayLength; i++)
             {
                 do
@@ -94,14 +100,13 @@ namespace task1
                     }
                 } while (!isAppropriate);
             }
-            Console.WriteLine("Исходный массив:");
-            PrintArray(basicArray);
         }
 
         static (int[], bool) AddNewArrayElements(int[] basicArray, bool isArrayEmpty, int arrayLength)
         {
-            bool isAppropriateSubMenuPoint;
-            int subMenuPoint = 3;
+            bool isAppropriateSubMenuPoint; // переменная-индикатор для проверки корректности ввода пункта меню при выборе способа заполнения массива
+            int subMenuPoint = 3; // переменная для хранения выбранного пункта меню
+            // вывод меню и считывание выбранного пункта + проверка
             do
             {
                 try
@@ -133,6 +138,7 @@ namespace task1
                     Console.WriteLine("Введенное значение не соответствует ни одному пункту меню");
                 }
             } while (!isAppropriateSubMenuPoint);
+            // действия в соответствии с выбранным пунктом
             switch (subMenuPoint)
             {
                 case 1:
@@ -151,11 +157,13 @@ namespace task1
 
         static (int[], bool) RemoveMaxElements(int[] basicArray, bool isArrayEmpty)
         {
-            int[] temporaryArray = new int[0];
-            int temporaryArrayIndex = 0;
-            int maxElement = basicArray[0];
-            int maxElementsQuantity = 0;
-            for (int i = 0; i < basicArray.Length; i++)
+            int[] temporaryArray = new int[0]; // вспомогательный массив длиной 0
+            int temporaryArrayIndex = 0; // переменная-счетчик для индексов вспомогательного массива
+            int maxElement = basicArray[0]; // переменная для хранения максимального значения среди элементов массива
+            int maxElementsQuantity = 0; // количество элементов с максимальным значением в массиве
+            int arrayLength = basicArray.Length; // длина основного массива
+            // перебор элементов массива с целью выявления максимума и количества элементов с максимальным значением
+            for (int i = 0; i < arrayLength; i++)
             {
                 if (basicArray[i] > maxElement)
                 {
@@ -167,16 +175,18 @@ namespace task1
                     maxElementsQuantity++;
                 }
             }
-            if (maxElementsQuantity == basicArray.Length)
+            // если все элементы равны, массив очищается
+            if (maxElementsQuantity == arrayLength)
             {
-                Console.WriteLine("Все элементы в массиве равны, поэтому они все являются максимумами. \nВсе элементы будут удалены из массива.");
+                Console.WriteLine($"Все элементы в массиве равны {maxElement}, поэтому они все являются максимумами. \nВсе элементы будут удалены из массива.");
                 isArrayEmpty = true;
             }
             else
             {
+                //вывод максимального значения среди элементов и количества максимумов, перенос во вспомогательный массив всех намаксимальных элементов
                 Console.WriteLine($"Максимальное значение среди элементов: {maxElement}; количество элементов с максимальным значением: {maxElementsQuantity}. \nЭти элементы будут удалены.");
-                temporaryArray = new int[basicArray.Length - maxElementsQuantity];
-                for (int i = 0; i < basicArray.Length; i++)
+                temporaryArray = new int[arrayLength - maxElementsQuantity];
+                for (int i = 0; i < arrayLength; i++)
                 {
                     if (basicArray[i] != maxElement)
                     {
@@ -186,17 +196,20 @@ namespace task1
                 Console.WriteLine("Состав массива после удаления максимальных элементов:");
                 PrintArray(temporaryArray);
             }
+            // обновление основного массива
             basicArray = temporaryArray;
             return (basicArray, isArrayEmpty);
         }
 
         static (int[], bool) AddElementsArrayEnd(int[] basicArray, bool isArrayEmpty)
         {
-            int addedElementsQuantity = 0;
-            bool isAppropriateAddedElementsQuantity;
-            int[] temporaryArray;
-            int[] extraTemporaryArray = new int[0];
-            int extraTemporaryArrayIndex = 0;
+            int addedElementsQuantity = 0; // количество элементов, которые пользователь хочет добавить в массив
+            bool isAppropriateAddedElementsQuantity; // проверка корректности ввода количества добавляемых элементов
+            int[] temporaryArray; // вспомогательный массив 1
+            int[] extraTemporaryArray; // вспомогательный массив 2
+            int extraTemporaryArrayIndex = 0; // счетчик для индексов вспомогательного массива 2
+            int arrayLength = basicArray.Length; // длина основного массива
+            // ввод количества добавляемых элементов и проверка корректности ввода
             do
             {
                 try
@@ -210,14 +223,14 @@ namespace task1
                     }
                     else
                     {
-                        if (addedElementsQuantity + basicArray.Length <= 2146435071)
+                        if (addedElementsQuantity + arrayLength <= 2146435071)
                         {
                             isAppropriateAddedElementsQuantity = true;
                         }
                         else
                         {
                             isAppropriateAddedElementsQuantity = false;
-                            Console.WriteLine($"В массив невозможно добавить данное количество элементов: можно добавить не более {2146435071 - basicArray.Length} элементов.");
+                            Console.WriteLine($"В массив невозможно добавить данное количество элементов: можно добавить не более {2146435071 - arrayLength} элементов.");
                         }
                     }
                 }
@@ -229,25 +242,28 @@ namespace task1
                 catch (OverflowException)
                 {
                     isAppropriateAddedElementsQuantity = false;
-                    Console.WriteLine("Введённое вами значение отрицательное или выходит за границы типа Int32 (больше 2146435071)");
+                    Console.WriteLine($"Введённое вами значение отрицательное или превышает максимальное число элементов, которое можно добавить: {2146435071 - arrayLength}");
                 }
             } while (!isAppropriateAddedElementsQuantity);
+            // проверка количества добавляемых элементов на равенство 0
             if (addedElementsQuantity == 0)
             {
                 Console.WriteLine("Количество элементов, которое нужно добавить, равно 0, поэтому состав массива не изменится");
             }
             else
             {
+                // заполнение вспомогательного массива 1 элементами, которые пользователь хочет добавить в массив
                 temporaryArray = new int[addedElementsQuantity];
                 (temporaryArray, isArrayEmpty) = AddNewArrayElements(temporaryArray, isArrayEmpty, addedElementsQuantity);
-                if (basicArray.Length == 0 || isArrayEmpty)
+                if (isArrayEmpty || arrayLength == 0)
                 {
                     basicArray = temporaryArray;
                 }
                 else
                 {
-                    extraTemporaryArray = new int[basicArray.Length + addedElementsQuantity];
-                    for (int i = 0; i < basicArray.Length; i++)
+                    // если основной массив не пустой, то во вспомогательном массиве 2 элементы добавленные заносятся в единый массив с элементами основного массива, затем обновляется основной массив 
+                    extraTemporaryArray = new int[arrayLength + addedElementsQuantity];
+                    for (int i = 0; i < arrayLength; i++)
                     {
                         extraTemporaryArray[extraTemporaryArrayIndex++] = basicArray[i];
                     }
@@ -256,24 +272,26 @@ namespace task1
                         extraTemporaryArray[extraTemporaryArrayIndex++] = temporaryArray[i];
                     }
                     basicArray = extraTemporaryArray;
-                    Console.WriteLine("Состав массива на данный момент:");
-                    PrintArray(basicArray);
                 }
             }
+            Console.WriteLine("Состав массива на данный момент:");
+            PrintArray(basicArray);
             return (basicArray, isArrayEmpty);
         }
 
         static int[] ReplaceElementsCyclicalWay(int[] basicArray)
         {
-            int replaceStep = 0;
-            bool isAppropriateReplaceStep;
-            int[] temporaryArray = new int[basicArray.Length];
+            int replaceStep = 0; // шаг циклического сдвига элементов
+            bool isAppropriateReplaceStep; // проверка корректности ввода шага циклического сдвига
+            int arrayLength = basicArray.Length; // длина основного массива
+            int[] temporaryArray = new int[arrayLength]; // вспомогательный массив с длиной, равной длине основного массива
+            // ввод шага циклического сдвига элементов и проверка правильности ввода
             do
             {
                 try
                 {
                     Console.WriteLine("Введите неотрицательное целое число - на сколько элементов влево вы хотите сдвинуть каждое значение в массиве:");
-                    replaceStep = int.Parse(Console.ReadLine()) % basicArray.Length;
+                    replaceStep = int.Parse(Console.ReadLine()) % arrayLength;
                     if (replaceStep < 0)
                     {
                         isAppropriateReplaceStep = false;
@@ -301,22 +319,25 @@ namespace task1
             }
             else
             {
-                for (int i = 0; i < basicArray.Length; i++)
+                // передача элементов со сдвинутым порядком из основного массива в вспомогательный, затем обновление основного массива элементами в нужном порядке 
+                for (int i = 0; i < arrayLength; i++)
                 {
-                    temporaryArray[i] = basicArray[(i + replaceStep) % basicArray.Length];
+                    temporaryArray[i] = basicArray[(i + replaceStep) % arrayLength];
                 }
                 basicArray = temporaryArray;
-                Console.WriteLine("Состав массива на данный момент:");
-                PrintArray(basicArray);
             }
+            Console.WriteLine("Порядок элементов в массиве на данный момент:");
+            PrintArray(basicArray);
             return basicArray;
         }
 
         static void FindFirstNegativeElement(int[] basicArray)
         {
-            int comparisonQuantity = 0;
-            int arrayIndex = 0;
-            bool isNegativeElementFound = false;
+            int comparisonQuantity = 0; // количество сравнений
+            int arrayIndex = 0; // счетчик индексов элементов в массиве
+            bool isNegativeElementFound = false; // индикатор того, найден ли искомый элемент
+            int arrayLength = basicArray.Length; // длина основного масссива
+            // перебор всех элементов массива до тех пор, пока не найдется отрицательный
             do
             {
                 if (basicArray[arrayIndex++] < 0)
@@ -324,10 +345,11 @@ namespace task1
                     isNegativeElementFound = true;
                 }
                 comparisonQuantity++;
-            } while (!isNegativeElementFound || arrayIndex >= basicArray.Length);
+            } while (!isNegativeElementFound && arrayIndex < arrayLength);
+            // если отрицательный элемент найден, он выводится, иначе сообщается, что искомого элемента нет в массиве
             if (isNegativeElementFound)
             {
-                Console.WriteLine($"Первый отрицательный элемент в массиве: {basicArray[--arrayIndex]}; количество сравнений, необходимых для поиска этого элемента: {comparisonQuantity}.");
+                Console.WriteLine($"Первый отрицательный элемент в массиве: {basicArray[arrayIndex-1]}; его позиция в массиве: {arrayIndex}; количество сравнений, необходимых для поиска этого элемента: {comparisonQuantity}.");
             }
             else
             {
@@ -337,9 +359,11 @@ namespace task1
 
         static int[] SortOutArraySelection(int[] basicArray)
         {
-            for (int i = 1; i < basicArray.Length; i++)
+            int arrayLength = basicArray.Length; // длина основного массива
+            // сортировка методом простого обмена
+            for (int i = 1; i < arrayLength; i++)
             {
-                for (int j = basicArray.Length - 1; j >= i; j--)
+                for (int j = arrayLength - 1; j >= i; j--)
                 {
                     if (basicArray[j] < basicArray[j - 1])
                     {
@@ -354,14 +378,17 @@ namespace task1
 
         static void FindArrayElement(int[] basicArray)
         {
-            int comparisonQuantity = 0;
-            int targetElement = Int32.MinValue;
-            int leftMarker = 0;
-            int rightMarker = basicArray.Length - 1;
-            int middleMarker;
+            int arrayLength = basicArray.Length;
+            int comparisonQuantity = 0; // число сравнений
+            int targetElement = Int32.MinValue; // переменная для хранения искомого элемента
+            int leftMarker = 0; // переменная для хранения индекса левой границы
+            int rightMarker = arrayLength - 1; // переменная для хранения индекса правой границы
+            int middleMarker; // переменная для хранения индекса середины
 
             bool isAppropriateTargetElement;
+            // сортировка списка методом простого обмена
             basicArray = SortOutArraySelection(basicArray);
+            // ввод искомого элемента и проверка на правильность ввода
             do
             {
                 try
@@ -381,6 +408,7 @@ namespace task1
                     Console.WriteLine("Введённое вами значение выходит за границы типа Int32 (меньше -2147483648 или больше 2147483647)");
                 }
             } while (!isAppropriateTargetElement);
+            // бинарный поиск
             do
             {
                 middleMarker = (leftMarker + rightMarker) / 2;
@@ -394,6 +422,7 @@ namespace task1
                 }
                 comparisonQuantity++;
             } while (leftMarker != rightMarker);
+            // если элемент найден, находим его первое вхождение в массив, иначе сообщаем, что в массиве нет искомого элемента
             if (basicArray[leftMarker] == targetElement)
             {
                 while ((leftMarker - 1) > 0 && basicArray[leftMarker - 1] == targetElement)
@@ -404,14 +433,16 @@ namespace task1
             }
             else
             {
-                Console.WriteLine("Искомый элемент отсутствует в списке.");
+                Console.WriteLine("Искомый элемент отсутствует в массиве.");
             }
         }
 
         static int[] SortOutArrayShaker(int[] basicArray)
         {
+            int arrayLength = basicArray.Length;
             int leftMarker = 0;
-            int rightMarker = basicArray.Length - 1;
+            int rightMarker = arrayLength - 1;
+            // шейкер-сортировка
             while (leftMarker <= rightMarker)
             {
                 for (int i = rightMarker; i > leftMarker; i--)
@@ -446,7 +477,7 @@ namespace task1
             int arrayLength = 0;
             int[] basicArray = new int[0];
 
-            #region menu
+            // вывод меню, считывание выбранного пункта меню и действия в соответствии с выбранным пунктом; цикл выполняется, пока пользователь не выберет пункт завершения
             Console.WriteLine("Добро пожаловать! Данная программа поможет вам обработать массив целых чисел.");
             do
             {
@@ -628,8 +659,6 @@ namespace task1
                         break;
                 }
             } while (menuPoint!=10);
-            #endregion
         }
     }
 }
-
