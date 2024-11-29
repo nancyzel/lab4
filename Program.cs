@@ -587,6 +587,7 @@
                         break;
                     case 2:
                         Console.WriteLine("Вы выбрали: вывести массив в консоль");
+                        Console.WriteLine("Состав массива на данный момент:");
                         PrintArray(basicArray);
                         break;
                     case 3:
