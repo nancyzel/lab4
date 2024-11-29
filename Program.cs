@@ -1,4 +1,4 @@
-namespace task1
+﻿namespace task1
 {
     internal class Program
     {
@@ -6,11 +6,18 @@ namespace task1
         {
             int arrayLength = basicArray.Length; // длина массива
             // вывод массива поэлементно
-            for (int i = 0; i < arrayLength; i++)
+            if (arrayLength == 0)
             {
-                Console.Write(basicArray[i] + " ");
+                Console.WriteLine("Массив пустой");
             }
-            Console.WriteLine();
+            else
+            {
+                for (int i = 0; i < arrayLength; i++)
+                {
+                    Console.Write(basicArray[i] + " ");
+                }
+                Console.WriteLine();
+            }
         }
 
         static void GetArrayUsingRandomElements(int[] basicArray, int arrayLength)
@@ -193,11 +200,11 @@ namespace task1
                         temporaryArray[temporaryArrayIndex++] = basicArray[i];
                     }
                 }
-                Console.WriteLine("Состав массива после удаления максимальных элементов:");
-                PrintArray(temporaryArray);
             }
             // обновление основного массива
             basicArray = temporaryArray;
+            Console.WriteLine("Состав массива после удаления максимальных элементов:");
+            PrintArray(basicArray);
             return (basicArray, isArrayEmpty);
         }
 
@@ -223,7 +230,7 @@ namespace task1
                     }
                     else
                     {
-                        if (addedElementsQuantity + arrayLength <= 2146435071)
+                        if (addedElementsQuantity <= 2146435071 - arrayLength)
                         {
                             isAppropriateAddedElementsQuantity = true;
                         }
@@ -386,6 +393,7 @@ namespace task1
             int middleMarker; // переменная для хранения индекса середины
 
             bool isAppropriateTargetElement;
+            bool isElementFound = false;
             // сортировка списка методом простого обмена
             basicArray = SortOutArraySelection(basicArray);
             // ввод искомого элемента и проверка на правильность ввода
@@ -412,26 +420,31 @@ namespace task1
             do
             {
                 middleMarker = (leftMarker + rightMarker) / 2;
-                if (basicArray[middleMarker] < targetElement)
+                if (basicArray[middleMarker] == targetElement)
                 {
-                    leftMarker = middleMarker + 1;
+                    leftMarker = middleMarker;
+                    isElementFound = true;
+                    while ((leftMarker - 1) >= 0 && basicArray[leftMarker - 1] == targetElement)
+                    {
+                        leftMarker--;
+                    }
+                    Console.WriteLine($"Элемент найден. Позиция первого элемента с искомым значением в отсортированном массиве: {leftMarker + 1};  количество сравнений, необходимых для поиска элемента с искомым значением: {comparisonQuantity+1}.");
                 }
                 else
                 {
-                    rightMarker = middleMarker;
+                    if (basicArray[middleMarker] < targetElement)
+                    {
+                        leftMarker = middleMarker + 1;
+                    }
+                    else
+                    {
+                        rightMarker = middleMarker - 1;
+                    }
                 }
                 comparisonQuantity++;
-            } while (leftMarker != rightMarker);
+            } while (leftMarker <= rightMarker && !isElementFound);
             // если элемент найден, находим его первое вхождение в массив, иначе сообщаем, что в массиве нет искомого элемента
-            if (basicArray[leftMarker] == targetElement)
-            {
-                while ((leftMarker - 1) > 0 && basicArray[leftMarker - 1] == targetElement)
-                {
-                    leftMarker--;
-                }
-                Console.WriteLine($"Элемент найден. Позиция первого элемента с искомым значением в отсортированном массиве: {leftMarker + 1};  количество сравнений, необходимых для поиска этого элемента: {comparisonQuantity}.");
-            }
-            else
+            if (!isElementFound)
             {
                 Console.WriteLine("Искомый элемент отсутствует в массиве.");
             }
@@ -574,15 +587,7 @@ namespace task1
                         break;
                     case 2:
                         Console.WriteLine("Вы выбрали: вывести массив в консоль");
-                        if (!isArrayEmpty && basicArray.Length != 0)
-                        {
-                            Console.WriteLine("Состав массива на данный момент:");
-                            PrintArray(basicArray);
-                        }
-                        else
-                        {
-                            Console.WriteLine("Выбранное действие совершить невозможно, так как массив пустой.");
-                        }
+                        PrintArray(basicArray);
                         break;
                     case 3:
                         Console.WriteLine("Вы выбрали: выполнить удаление всех элементов с максимальным значением");
