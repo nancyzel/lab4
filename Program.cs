@@ -2,6 +2,8 @@
 {
     internal class Program
     {
+        const int arraySizeLimit = 2146435071;
+
         static void PrintArray(int[] basicArray)
         {
             int arrayLength = basicArray.Length; // длина массива
@@ -230,14 +232,14 @@
                     }
                     else
                     {
-                        if (addedElementsQuantity <= 2146435071 - arrayLength)
+                        if (addedElementsQuantity <= arraySizeLimit - arrayLength)
                         {
                             isAppropriateAddedElementsQuantity = true;
                         }
                         else
                         {
                             isAppropriateAddedElementsQuantity = false;
-                            Console.WriteLine($"В массив невозможно добавить данное количество элементов: можно добавить не более {2146435071 - arrayLength} элементов.");
+                            Console.WriteLine($"В массив невозможно добавить данное количество элементов: можно добавить не более {arraySizeLimit - arrayLength} элементов.");
                         }
                     }
                 }
@@ -249,7 +251,7 @@
                 catch (OverflowException)
                 {
                     isAppropriateAddedElementsQuantity = false;
-                    Console.WriteLine($"Введённое вами значение отрицательное или превышает максимальное число элементов, которое можно добавить: {2146435071 - arrayLength}");
+                    Console.WriteLine($"Введённое вами значение отрицательное или превышает максимальное число элементов, которое можно добавить: {arraySizeLimit - arrayLength}");
                 }
             } while (!isAppropriateAddedElementsQuantity);
             // проверка количества добавляемых элементов на равенство 0
@@ -557,10 +559,10 @@
                                     }
                                     else
                                     {
-                                        if (arrayLength > 2146435071)
+                                        if (arrayLength > arraySizeLimit)
                                         {
                                             isAppropriate = false;
-                                            Console.WriteLine("Введённое вами значение является слишком большим (больше 2146435071)");
+                                            Console.WriteLine($"Введённое вами значение является слишком большим (больше {arraySizeLimit})");
                                         }
                                         else
                                         {
@@ -577,7 +579,7 @@
                             catch (OverflowException)
                             {
                                 isAppropriate = false;
-                                Console.WriteLine("Введённое вами значение является слишком большим (больше 2146435071)");
+                                Console.WriteLine($"Введённое вами значение является слишком большим (больше {arraySizeLimit})");
                             }
                         } while (!isAppropriate);
                         basicArray = new int[arrayLength];
