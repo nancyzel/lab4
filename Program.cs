@@ -2,7 +2,7 @@
 {
     internal class Program
     {
-        const int arraySizeLimit = 2146435071;
+        const int arraySizeLimit = 2147483591;
 
         static void PrintArray(int[] basicArray)
         {
