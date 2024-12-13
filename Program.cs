@@ -2,7 +2,7 @@
 {
     internal class Program
     {
-        const int arraySizeLimit = Array.MaxLength;
+        const int arraySizeLimit = 2147483591;
 
         static void PrintArray(int[] basicArray)
         {
